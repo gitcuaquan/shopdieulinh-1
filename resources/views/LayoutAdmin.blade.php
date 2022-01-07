@@ -1,112 +1,92 @@
-{{-- <!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
     <meta charset="utf-8">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Đăng nhập</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Favicons -->
-    <link href="public/img/favicon.png" rel="icon">
-    <link href="public/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.gstatic.com" rel="preconnect">
-    <link
-        href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
-        rel="stylesheet">
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
-    <!-- Vendor CSS Files -->
-    <link href="{{ asset('public/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/quill/quill.snow.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="{{ asset('public/vendor/simple-datatables/style.css') }}" rel="stylesheet">
-
-    <!-- Template Main CSS File -->
-    <link href="{{ asset('public/css/style.css') }}" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css"
+        integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn" crossorigin="anonymous">
+    <!-- Styles -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-fQybjgWLrvvRgtW6bFlB7jaZrFsaBXjsOMm/tB9LTS58ONXgqbR9W8oWht/amnpF" crossorigin="anonymous">
+    </script>
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body>
+    <div id="app">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    {{ config('app.name', 'Laravel') }}
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="{{ __('Toggle navigation') }}">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <main>
-        <div class="container">
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
 
-            <section
-                class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    </ul>
 
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="index.html" class="logo d-flex align-items-center w-auto">
-                                    <img src="assets/img/logo.png" alt="">
-                                    <span class="d-none d-lg-block">Đăng nhập</span>
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        @guest
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                            </li>
+                            @if (Route::has('register'))
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                </li>
+                            @endif
+                        @else
+                            <li class="nav-item dropdown">
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    {{ Auth::user()->name }}
                                 </a>
-                            </div><!-- End Logo -->
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4">SHOP DIỆU LINH</h5>
-                                    </div>
-                                    <form class="row g-3 needs-validation" novalidate method="POST"
-                                        action="{{ route('login') }}">
-                                        <div class="col-12">
-                                            <label for="email" class="form-label">Email</label>
-                                            <div class="input-group has-validation">
-                                                <input type="email" name="email" class="form-control" id="email">
-                                                @error('email')
-                                                    <span class="invalid-feedback" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                @enderror
-                                            </div>
-                                        </div>
 
-                                        <div class="col-12">
-                                            <label for="password" class="form-label">Mật khẩu</label>
-                                            <input type="password" name="passwword" class="form-control" id="password"
-                                                required>
-                                            @error('password')
-                                                <span class="invalid-feedback" role="alert">
-                                                    <strong>{{ $message }}</strong>
-                                                </span>
-                                            @enderror
-                                        </div>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                             document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
 
-                                        <div class="col-12">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" name="remember"
-                                                    id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="remember">
-                                                    Nhớ mật khẩu
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary w-100">
-                                                Đăng nhập
-                                            </button>
-                                        </div>
-                                        @if (Route::has('password.request'))
-                                            <a class="btn btn-link" href="{{ route('password.request') }}">
-                                                Quên mật khẩu
-                                            </a>
-                                        @endif
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
                                     </form>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
+                            </li>
+                        @endguest
+                    </ul>
                 </div>
-            </section>
-        </div>
-    </main>
+            </div>
+        </nav>
+        <main class="py-4">
+            @yield('body')
+        </main>
+    </div>
 </body>
 
-</html> --}}
+</html>
